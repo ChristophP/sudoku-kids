@@ -79,29 +79,58 @@ generateSecondRow seed grid =
             ( grid, seed2 )
 
 
+
+-- trickier than you think
+-- in certain cases some values need to be excluded, otherwise the sudoku might end up being invalid
+-- explanation: rows in quadrant 3 should not occur in as cols in quadrant two (order does not matter)
+--    otherwise solving the puzzle is not possible
+
+
 generateThirdBox : Random.Seed -> Grid Int -> ( Grid Int, Seed )
 generateThirdBox seed grid =
     let
-        ( leftPart, seed1 ) =
-            Random.step (Random.List.shuffle [ Grid.get Grid.G12 grid, Grid.get Grid.G22 grid ]) seed
+        preventInvalidSudoku num =
+            -- find in same column as num in second quadrant and exclude it
+            case Grid.getBox Grid.BR grid of
+                [ b11, b12, b21, b22 ] ->
+                    if num == b11 then
+                        b21
 
-        ( rightPart, seed2 ) =
-            Random.step (Random.List.shuffle [ Grid.get Grid.G11 grid, Grid.get Grid.G21 grid ]) seed1
+                    else if num == b12 then
+                        b22
+
+                    else if num == b21 then
+                        b11
+
+                    else
+                        b12
+
+                -- should not happen
+                _ ->
+                    -1
+
+        num31 =
+            tryNumber (makeNumbersToTry []) (Grid.getCross Grid.G31 grid)
+
+        excludeNum =
+            preventInvalidSudoku num31
+
+        num32 =
+            tryNumber (makeNumbersToTry [ num31, excludeNum ]) (Grid.getCross Grid.G32 grid)
+
+        num41 =
+            tryNumber (makeNumbersToTry [ num31, num32 ]) (Grid.getCross Grid.G41 grid)
+
+        num42 =
+            tryNumber (makeNumbersToTry [ num31, num32, num41 ]) (Grid.getCross Grid.G42 grid)
+
+        newGrid =
+            Grid.set Grid.G31 num31 grid
+                |> Grid.set Grid.G32 num32
+                |> Grid.set Grid.G41 num41
+                |> Grid.set Grid.G42 num42
     in
-    case leftPart ++ rightPart of
-        [ first, second, third, fourth ] ->
-            let
-                newGrid =
-                    Grid.set Grid.G31 first grid
-                        |> Grid.set Grid.G41 second
-                        |> Grid.set Grid.G32 third
-                        |> Grid.set Grid.G42 fourth
-            in
-            ( newGrid, seed2 )
-
-        -- should not happen
-        _ ->
-            ( grid, seed2 )
+    ( newGrid, seed )
 
 
 tryNumber : List Int -> List Int -> Int
