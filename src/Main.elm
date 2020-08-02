@@ -5,6 +5,9 @@ import Browser.Navigation as Nav
 import Grid exposing (Grid)
 import Html exposing (Html, div, h1, text)
 import Html.Attributes exposing (class, style)
+import Sudoku
+import Task
+import Time
 
 
 main : Program () Model Msg
@@ -22,12 +25,18 @@ main =
 
 
 type alias Model =
-    { grid : Grid Int }
+    { solution : Grid Int
+    , board : Grid (Maybe Int)
+    }
 
 
 init : () -> ( Model, Cmd Msg )
 init flags =
-    ( { grid = Grid.init 3 }, Cmd.none )
+    ( { solution = Grid.init 0
+      , board = Grid.init Nothing
+      }
+    , Task.perform GotTime Time.now
+    )
 
 
 
@@ -35,18 +44,29 @@ init flags =
 
 
 type Msg
-    = NoOp
+    = GotTime Time.Posix
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        NoOp ->
-            ( model, Cmd.none )
+        GotTime now ->
+            ( { model | solution = Sudoku.generate (Time.posixToMillis now) }
+            , Cmd.none
+            )
 
 
 
 -- VIEW
+
+
+convertVal val =
+    case val of
+        Just v ->
+            String.fromInt v
+
+        Nothing ->
+            ""
 
 
 view : Model -> Browser.Document msg
@@ -59,8 +79,12 @@ view model =
                 , style "width" "50vw"
                 , style "height" "50vw"
                 ]
-                (Grid.toList model.grid
+                (Grid.toList model.solution
                     |> List.map (\val -> div [ class "flex items-center justify-center border border-gray-800" ] [ text (String.fromInt val) ])
                 )
+
+            --(Grid.toList model.board
+            --|> List.map (convertVal >> (\val -> div [ class "flex items-center justify-center border border-gray-800" ] [ text val ]))
+            --)
             ]
         ]

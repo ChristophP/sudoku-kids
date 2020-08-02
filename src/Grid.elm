@@ -22,6 +22,13 @@ type Grid a
         }
 
 
+type Line
+    = L1
+    | L2
+    | L3
+    | L4
+
+
 type Cell
     = G11
     | G12
@@ -188,5 +195,65 @@ toList (Grid grid) =
     ]
 
 
+getRow : Line -> Grid a -> List a
+getRow line (Grid grid) =
+    case line of
+        L1 ->
+            [ grid.g11, grid.g12, grid.g13, grid.g14 ]
+
+        L2 ->
+            [ grid.g21, grid.g22, grid.g23, grid.g24 ]
+
+        L3 ->
+            [ grid.g31, grid.g32, grid.g33, grid.g34 ]
+
+        L4 ->
+            [ grid.g41, grid.g42, grid.g43, grid.g44 ]
+
+
+getCol : Line -> Grid a -> List a
+getCol line (Grid grid) =
+    case line of
+        L1 ->
+            [ grid.g11, grid.g21, grid.g31, grid.g41 ]
+
+        L2 ->
+            [ grid.g12, grid.g22, grid.g32, grid.g42 ]
+
+        L3 ->
+            [ grid.g13, grid.g23, grid.g33, grid.g43 ]
+
+        L4 ->
+            [ grid.g14, grid.g24, grid.g34, grid.g44 ]
+
+
+
+-- boxes are defined as follows
+
+
+type BoxPosition
+    = TR
+    | TL
+    | BR
+    | BL
+
+
+getBox : BoxPosition -> Grid a -> List a
+getBox line (Grid grid) =
+    case line of
+        BL ->
+            [ grid.g11, grid.g12, grid.g21, grid.g22 ]
+
+        BR ->
+            [ grid.g13, grid.g14, grid.g23, grid.g24 ]
+
+        TL ->
+            [ grid.g31, grid.g32, grid.g41, grid.g42 ]
+
+        TR ->
+            [ grid.g33, grid.g34, grid.g43, grid.g44 ]
+
+
 
 -- constraints
+-- generate
