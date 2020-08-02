@@ -2,8 +2,9 @@ module Main exposing (main)
 
 import Browser
 import Browser.Navigation as Nav
-import Html exposing (Html, h1, text)
-import Html.Attributes exposing (class)
+import Grid exposing (Grid)
+import Html exposing (Html, div, h1, text)
+import Html.Attributes exposing (class, style)
 
 
 main : Program () Model Msg
@@ -21,12 +22,12 @@ main =
 
 
 type alias Model =
-    {}
+    { grid : Grid Int }
 
 
 init : () -> ( Model, Cmd Msg )
 init flags =
-    ( {}, Cmd.none )
+    ( { grid = Grid.init 3 }, Cmd.none )
 
 
 
@@ -50,5 +51,16 @@ update msg model =
 
 view : Model -> Browser.Document msg
 view model =
-    Browser.Document "Give me a title"
-        [ h1 [ class "text-4xl py-4 text-center" ] [ text "Let's go pet stack." ] ]
+    Browser.Document "Sudoku-kids"
+        [ h1 [ class "py-4 text-4xl text-center" ] [ text "Sudoku-Kids" ]
+        , div [ class "w-full" ]
+            [ div
+                [ class "w-full mx-auto text-lg text-5xl bg-blue-200 grid grid-rows-4 grid-cols-4"
+                , style "width" "50vw"
+                , style "height" "50vw"
+                ]
+                (Grid.toList model.grid
+                    |> List.map (\val -> div [ class "flex items-center justify-center border border-gray-800" ] [ text (String.fromInt val) ])
+                )
+            ]
+        ]
