@@ -135,13 +135,13 @@ generateThirdBox seed grid =
 
 tryNumber : List Int -> List Int -> Int
 tryNumber numbersToTry cross =
-    case Debug.log "trying" numbersToTry of
+    case numbersToTry of
         num :: rest ->
             if List.member num cross then
                 tryNumber rest cross
 
             else
-                Debug.log "found" num
+                num
 
         [] ->
             -1
