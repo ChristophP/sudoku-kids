@@ -21,7 +21,7 @@ generate seed =
         ( grid3, _ ) =
             generateThirdBox seed2 grid2
     in
-    grid3
+    fillLastBox grid3
 
 
 randomRowGenerator : Generator (List Int)
@@ -102,3 +102,48 @@ generateThirdBox seed grid =
         -- should not happen
         _ ->
             ( grid, seed2 )
+
+
+tryNumber : List Int -> List Int -> Int
+tryNumber numbersToTry cross =
+    case Debug.log "trying" numbersToTry of
+        num :: rest ->
+            if List.member num cross then
+                tryNumber rest cross
+
+            else
+                Debug.log "found" num
+
+        [] ->
+            -1
+
+
+makeNumbersToTry : List Int -> List Int
+makeNumbersToTry excludeVals =
+    List.filter (\val -> not (List.member val excludeVals)) [ 1, 2, 3, 4 ]
+
+
+
+-- implementation could be more efficient by memorizing which numbers were already tried but
+-- saving a bunch of milli or microseconds does not matter here
+
+
+fillLastBox : Grid Int -> Grid Int
+fillLastBox grid =
+    let
+        num33 =
+            tryNumber (makeNumbersToTry []) (Grid.getCross Grid.G33 grid)
+
+        num34 =
+            tryNumber (makeNumbersToTry [ num33 ]) (Grid.getCross Grid.G34 grid)
+
+        num43 =
+            tryNumber (makeNumbersToTry [ num33, num34 ]) (Grid.getCross Grid.G43 grid)
+
+        num44 =
+            tryNumber (makeNumbersToTry [ num33, num34, num43 ]) (Grid.getCross Grid.G44 grid)
+    in
+    Grid.set Grid.G33 num33 grid
+        |> Grid.set Grid.G34 num34
+        |> Grid.set Grid.G43 num43
+        |> Grid.set Grid.G44 num44

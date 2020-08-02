@@ -227,6 +227,22 @@ getCol line (Grid grid) =
             [ grid.g14, grid.g24, grid.g34, grid.g44 ]
 
 
+setRow : Line -> Grid a -> List a
+setRow line (Grid grid) =
+    case line of
+        L1 ->
+            [ grid.g11, grid.g12, grid.g13, grid.g14 ]
+
+        L2 ->
+            [ grid.g21, grid.g22, grid.g23, grid.g24 ]
+
+        L3 ->
+            [ grid.g31, grid.g32, grid.g33, grid.g34 ]
+
+        L4 ->
+            [ grid.g41, grid.g42, grid.g43, grid.g44 ]
+
+
 
 -- boxes are defined as follows
 
@@ -254,6 +270,57 @@ getBox line (Grid grid) =
             [ grid.g33, grid.g34, grid.g43, grid.g44 ]
 
 
+getCross : Cell -> Grid a -> List a
+getCross cell grid =
+    case cell of
+        G11 ->
+            getRow L1 grid ++ getCol L1 grid
+
+        G12 ->
+            getRow L1 grid ++ getCol L2 grid
+
+        G13 ->
+            getRow L1 grid ++ getCol L3 grid
+
+        G14 ->
+            getRow L1 grid ++ getCol L4 grid
+
+        G21 ->
+            getRow L2 grid ++ getCol L1 grid
+
+        G22 ->
+            getRow L2 grid ++ getCol L2 grid
+
+        G23 ->
+            getRow L2 grid ++ getCol L3 grid
+
+        G24 ->
+            getRow L2 grid ++ getCol L4 grid
+
+        G31 ->
+            getRow L3 grid ++ getCol L1 grid
+
+        G32 ->
+            getRow L3 grid ++ getCol L2 grid
+
+        G33 ->
+            getRow L3 grid ++ getCol L3 grid
+
+        G34 ->
+            getRow L3 grid ++ getCol L4 grid
+
+        G41 ->
+            getRow L4 grid ++ getCol L1 grid
+
+        G42 ->
+            getRow L4 grid ++ getCol L2 grid
+
+        G43 ->
+            getRow L4 grid ++ getCol L3 grid
+
+        G44 ->
+            getRow L4 grid ++ getCol L4 grid
+
+
 
 -- constraints
--- generate
