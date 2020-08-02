@@ -5,6 +5,7 @@ import Browser.Navigation as Nav
 import Grid exposing (Grid)
 import Html exposing (Html, div, h1, text)
 import Html.Attributes exposing (class, style)
+import Random
 import Sudoku
 import Task
 import Time
@@ -51,7 +52,11 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         GotTime now ->
-            ( { model | solution = Sudoku.generate (Time.posixToMillis now) }
+            let
+                seed =
+                    Random.initialSeed (Time.posixToMillis now)
+            in
+            ( { model | solution = Sudoku.generate seed }
             , Cmd.none
             )
 
