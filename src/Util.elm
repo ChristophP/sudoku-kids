@@ -1,6 +1,7 @@
 module Util exposing (..)
 
-import Html exposing (Attribute)
+import Html exposing (Attribute, Html, text)
+import Html.Attributes exposing (class)
 import Html.Events exposing (stopPropagationOn)
 import Json.Decode as JD
 
@@ -27,3 +28,21 @@ listChunkHelp size list chunks =
 onClickStopPropagation : msg -> Attribute msg
 onClickStopPropagation msg =
     stopPropagationOn "click" (JD.succeed ( msg, True ))
+
+
+viewIf : Bool -> Html msg -> Html msg
+viewIf show html =
+    if show then
+        html
+
+    else
+        text ""
+
+
+attrIf : Bool -> Attribute msg -> Attribute msg
+attrIf show attr =
+    if show then
+        attr
+
+    else
+        class ""

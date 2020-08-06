@@ -3,14 +3,14 @@ module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Grid exposing (Grid)
-import Html exposing (Html, div, h1, text)
+import Html exposing (Html, div, h1, span, text)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick, stopPropagationOn)
 import Random
 import Sudoku
 import Task
 import Time
-import Util
+import Util exposing (attrIf, viewIf)
 
 
 main : Program () Model Msg
@@ -122,22 +122,28 @@ viewInputNumbers cell =
 
 
 viewRow : Model -> List Grid.Cell -> List (Html Msg)
-viewRow { puzzle, activeCell } row =
+viewRow { puzzle, solution, activeCell } row =
     List.map
         (\cell ->
+            let
+                value =
+                    Grid.get cell puzzle
+
+                isCorrectValue =
+                    value == Grid.get cell solution
+            in
             div
                 [ class "relative flex items-center justify-center border border-gray-800"
-                , class "cursor-pointer select-none"
-                , onClick (CellClicked cell)
+                , class "select-none"
+                , attrIf (not isCorrectValue) (class "cursor-pointer")
+                , attrIf (not isCorrectValue) (onClick (CellClicked cell))
                 ]
-                [ text (String.fromInt (Grid.get cell puzzle))
+                [ span
+                    [ attrIf isCorrectValue (class "text-green-500") ]
+                    [ text (String.fromInt value) ]
                 , case activeCell of
                     Just cell_ ->
-                        if cell_ == cell then
-                            viewInputNumbers cell
-
-                        else
-                            text ""
+                        viewIf (cell_ == cell) (viewInputNumbers cell)
 
                     Nothing ->
                         text ""
