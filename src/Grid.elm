@@ -152,6 +152,15 @@ set cell val (Grid grid) =
             Grid { grid | g44 = val }
 
 
+cellPositions : List (List Cell)
+cellPositions =
+    [ [ G41, G42, G43, G44 ]
+    , [ G31, G32, G33, G34 ]
+    , [ G21, G22, G23, G24 ]
+    , [ G11, G12, G13, G14 ]
+    ]
+
+
 init : a -> Grid a
 init value =
     Grid
