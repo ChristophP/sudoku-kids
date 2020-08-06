@@ -9,6 +9,7 @@ import Random
 import Sudoku
 import Task
 import Time
+import Util
 
 
 main : Program () Model Msg
@@ -56,7 +57,7 @@ update msg model =
                 seed =
                     Random.initialSeed (Time.posixToMillis now)
             in
-            ( { model | solution = Sudoku.generate seed }
+            ( { model | solution = Sudoku.generateSolution seed }
             , Cmd.none
             )
 
@@ -74,6 +75,15 @@ convertVal val =
             ""
 
 
+viewPuzzle model =
+    Sudoku.createPuzzle model.solution
+        |> Grid.toList
+        |> Util.listChunk 4
+        |> List.reverse
+        |> List.concat
+        |> List.map (\val -> div [ class "flex items-center justify-center border border-gray-800" ] [ text (String.fromInt val) ])
+
+
 view : Model -> Browser.Document msg
 view model =
     Browser.Document "Sudoku-kids"
@@ -84,9 +94,7 @@ view model =
                 , style "width" "50vw"
                 , style "height" "50vw"
                 ]
-                (Grid.toList model.solution
-                    |> List.map (\val -> div [ class "flex items-center justify-center border border-gray-800" ] [ text (String.fromInt val) ])
-                )
+                (viewPuzzle model)
 
             --(Grid.toList model.board
             --|> List.map (convertVal >> (\val -> div [ class "flex items-center justify-center border border-gray-800" ] [ text val ]))

@@ -1,4 +1,4 @@
-module Sudoku exposing (..)
+module Sudoku exposing (createPuzzle, generateSolution)
 
 import Grid exposing (Grid)
 import Random exposing (Generator, Seed)
@@ -6,11 +6,33 @@ import Random.List
 
 
 
+-- create puzzle
+
+
+createPuzzle : Grid Int -> Grid Int
+createPuzzle solution =
+    --0012
+    --0103
+    --0000
+    --4020
+    Grid.set Grid.G12 0 solution
+        |> Grid.set Grid.G13 0
+        |> Grid.set Grid.G21 0
+        |> Grid.set Grid.G22 0
+        |> Grid.set Grid.G23 0
+        |> Grid.set Grid.G24 0
+        |> Grid.set Grid.G31 0
+        |> Grid.set Grid.G33 0
+        |> Grid.set Grid.G41 0
+        |> Grid.set Grid.G42 0
+
+
+
 -- generate
 
 
-generate : Seed -> Grid Int
-generate seed =
+generateSolution : Seed -> Grid Int
+generateSolution seed =
     let
         ( grid1, seed1 ) =
             generateFirstRow seed (Grid.init 0)
