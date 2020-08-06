@@ -2,6 +2,7 @@
   "scripts": {
     "start": "parcel src/index.html",
     "build": "parcel build src/index.html",
+    "now-build": "parcel build src/index.html --out-dir public",
     "lint": "eslint src && elm-format src --validate",
     "lint:fix": "eslint src --fix && elm-format src --yes"
   },

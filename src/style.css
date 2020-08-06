@@ -8,6 +8,8 @@ html, body {
 
 body {
   font-size: 16px;
+  touch-action: none;
+  @apply select-none;
 }
 
 svg {

@@ -3,7 +3,7 @@ module Main exposing (main)
 import Browser
 import Browser.Navigation as Nav
 import Grid exposing (Grid)
-import Html exposing (Html, div, h1, span, text)
+import Html exposing (Html, button, div, h1, span, text)
 import Html.Attributes exposing (class, style)
 import Html.Events exposing (onClick, stopPropagationOn)
 import Random
@@ -52,6 +52,7 @@ type Msg
     = GotTime Time.Posix
     | CellClicked Grid.Cell
     | NumberSelected Grid.Cell Int
+    | Restart
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -95,6 +96,9 @@ update msg model =
             , Cmd.none
             )
 
+        Restart ->
+            init ()
+
 
 
 -- VIEW
@@ -105,13 +109,18 @@ viewPuzzle model =
     List.concatMap (viewRow model) Grid.cellPositions
 
 
+viewInputNumbers : Grid.Cell -> Html Msg
 viewInputNumbers cell =
-    div [ class "absolute bottom-0 z-20 flex" ]
+    div
+        [ class "flex mx-auto mt-2"
+        , style "width" "60vw"
+        , style "height" "15vw"
+        ]
         (List.map
             (\num ->
                 div
-                    [ class "flex items-center justify-center w-20 h-20"
-                    , class "bg-white border border-gray-600 cursor-pointer select-none"
+                    [ class "flex items-center justify-center flex-1 "
+                    , class "bg-white border border-gray-600 cursor-pointer"
                     , class "shadow-md"
                     , Util.onClickStopPropagation (NumberSelected cell num)
                     ]
@@ -134,19 +143,12 @@ viewRow { puzzle, solution, activeCell } row =
             in
             div
                 [ class "relative flex items-center justify-center border border-gray-800"
-                , class "select-none"
                 , attrIf (not isCorrectValue) (class "cursor-pointer")
                 , attrIf (not isCorrectValue) (onClick (CellClicked cell))
                 ]
                 [ span
                     [ attrIf isCorrectValue (class "text-green-500") ]
-                    [ text (String.fromInt value) ]
-                , case activeCell of
-                    Just cell_ ->
-                        viewIf (cell_ == cell) (viewInputNumbers cell)
-
-                    Nothing ->
-                        text ""
+                    [ viewIf (value /= 0) (text (String.fromInt value)) ]
                 ]
         )
         row
@@ -156,12 +158,26 @@ view : Model -> Browser.Document Msg
 view model =
     Browser.Document "Sudoku-kids"
         [ h1 [ class "py-4 text-4xl text-center" ] [ text "Sudoku-Kids" ]
-        , div [ class "w-full" ]
+        , div [ class "w-full text-5xl" ]
             [ div
-                [ class "w-full mx-auto text-lg text-5xl bg-blue-200 grid grid-rows-4 grid-cols-4"
-                , style "width" "50vw"
-                , style "height" "50vw"
+                [ class "w-full mx-auto bg-blue-200 grid grid-rows-4 grid-cols-4"
+                , style "width" "80vw"
+                , style "height" "80vw"
                 ]
                 (viewPuzzle model)
+            , div []
+                [ case model.activeCell of
+                    Just cell ->
+                        viewInputNumbers cell
+
+                    Nothing ->
+                        text ""
+                ]
+            , viewIf (Grid.equals model.puzzle model.solution) <|
+                div
+                    [ class "flex flex-col items-center mx-auto text-6xl", style "width" "50vw" ]
+                    [ div [ class "animate-bounce" ] [ text "\u{1F973}" ]
+                    , button [ onClick Restart ] [ text "🔁" ]
+                    ]
             ]
         ]
