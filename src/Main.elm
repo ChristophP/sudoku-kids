@@ -113,8 +113,7 @@ viewInputNumbers : Grid.Cell -> Html Msg
 viewInputNumbers cell =
     div
         [ class "flex mx-auto mt-2"
-        , style "width" "60vw"
-        , style "height" "15vw"
+        , class "input-numbers"
         ]
         (List.map
             (\num ->
