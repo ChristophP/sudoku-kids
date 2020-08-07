@@ -27,6 +27,8 @@ svg {
   @apply border-r-4 border-gray-800
 }
 
-.sudoku-grid > :nth-child(5), .sudoku-grid > :nth-child(6), .sudoku-grid > :nth-child(7), .sudoku-grid > :nth-child(8) {
+.sudoku-grid > :nth-child(-n + 8):nth-child(n + 5) {
   @apply border-b-4 border-gray-800
 }
+
+
