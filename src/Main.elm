@@ -176,7 +176,7 @@ view model =
                     Nothing ->
                         text ""
                 ]
-            , viewIf (Grid.equals model.puzzle model.solution) <|
+            , viewIf (model.puzzle == model.solution) <|
                 div
                     [ class "flex flex-col items-center mx-auto text-6xl", style "width" "50vw" ]
                     [ div [ class "animate-bounce" ] [ text "\u{1F973}" ]

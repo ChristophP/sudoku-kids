@@ -183,28 +183,6 @@ init value =
         }
 
 
-equals : Grid a -> Grid a -> Bool
-equals (Grid g1) (Grid g2) =
-    List.all identity
-        [ g1.g11 == g2.g11
-        , g1.g12 == g2.g12
-        , g1.g13 == g2.g13
-        , g1.g14 == g2.g14
-        , g1.g21 == g2.g21
-        , g1.g22 == g2.g22
-        , g1.g23 == g2.g23
-        , g1.g24 == g2.g24
-        , g1.g31 == g2.g31
-        , g1.g32 == g2.g32
-        , g1.g33 == g2.g33
-        , g1.g34 == g2.g34
-        , g1.g41 == g2.g41
-        , g1.g42 == g2.g42
-        , g1.g43 == g2.g43
-        , g1.g44 == g2.g44
-        ]
-
-
 toList : Grid a -> List a
 toList (Grid grid) =
     [ grid.g11
@@ -351,7 +329,3 @@ getCross cell grid =
 
         G44 ->
             getRow L4 grid ++ getCol L4 grid
-
-
-
--- constraints
