@@ -2,6 +2,8 @@
 
 A small game of sudoku that kids (my own) are picking up surprisingly fast.
 
+![Screenshot showing puzzle](./screenshot.png)
+
 For anyone who's never played sudoku here are the rules:
 There are only numbers 1-4.
 1. Any row can only contain each number once.
