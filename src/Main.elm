@@ -164,10 +164,8 @@ view model =
         [ h1 [ class "py-4 text-4xl text-center" ] [ text "Sudoku-Kids" ]
         , div [ class "w-full text-5xl" ]
             [ div
-                [ class "w-full mx-auto bg-blue-200 grid grid-rows-4 grid-cols-4"
+                [ class "mx-auto bg-blue-200 shadow-lg grid grid-rows-4 grid-cols-4"
                 , class "sudoku-grid"
-                , style "width" "80vw"
-                , style "height" "80vw"
                 ]
                 (viewPuzzle model)
             , div []

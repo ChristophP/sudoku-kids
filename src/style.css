@@ -31,4 +31,16 @@ svg {
   @apply border-b-4 border-gray-800
 }
 
+@media (orientation: landscape) {
+  .sudoku-grid {
+    width: 60vh;
+    height: 60vh;
+  }
+}
 
+@media (orientation: portrait) {
+  .sudoku-grid {
+    width: 80vw;
+    height: 80vw;
+  }
+}
