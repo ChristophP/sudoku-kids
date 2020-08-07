@@ -23,4 +23,10 @@ svg {
 
 /* put custom utilities here */
 
+.sudoku-grid > :nth-child(4n + 2) {
+  @apply border-r-4 border-gray-800
+}
 
+.sudoku-grid > :nth-child(5), .sudoku-grid > :nth-child(6), .sudoku-grid > :nth-child(7), .sudoku-grid > :nth-child(8) {
+  @apply border-b-4 border-gray-800
+}

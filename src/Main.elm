@@ -140,11 +140,15 @@ viewRow { puzzle, solution, activeCell } row =
 
                 isCorrectValue =
                     value == Grid.get cell solution
+
+                isActiveCell =
+                    Just cell == activeCell
             in
             div
                 [ class "relative flex items-center justify-center border border-gray-800"
                 , attrIf (not isCorrectValue) (class "cursor-pointer")
                 , attrIf (not isCorrectValue) (onClick (CellClicked cell))
+                , attrIf isActiveCell (class "bg-blue-500")
                 ]
                 [ span
                     [ attrIf isCorrectValue (class "text-green-500") ]
@@ -161,6 +165,7 @@ view model =
         , div [ class "w-full text-5xl" ]
             [ div
                 [ class "w-full mx-auto bg-blue-200 grid grid-rows-4 grid-cols-4"
+                , class "sudoku-grid"
                 , style "width" "80vw"
                 , style "height" "80vw"
                 ]
